@@ -38,12 +38,26 @@ monitoring:
   enabled: true
   elasticsearch:
     username: beats_system
-    password: ${BEATS_SYSTEM_PASSWORD}
+    password: changeme
+
+filebeat.inputs:
+  - type: filestream
+    id: my-filestream-id
+    enabled: true
+    paths:
+      - /var/log/*.log
+      - /var/log/syslog
+    prospector:
+      scanner:
+        fingerprint:
+          length: 128
+          offset: 0
 
 output.elasticsearch:
-  hosts: [ http://elasticsearch:9200 ]
+  hosts: [http://elasticsearch:9200]
+  preset: balanced
   username: filebeat_internal
-  password: ${FILEBEAT_INTERNAL_PASSWORD}
+  password: changeme
 
 ## HTTP endpoint for health checking
 ## https://www.elastic.co/docs/reference/beats/filebeat/http-endpoint
